@@ -3,42 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Kid Form</title>
+  <title>Kid Profile Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" />
   <style>
     body {
-      background-color: #1a1a1a;
-      color: #fff;
-      font-family: sans-serif;
-      padding: 1em;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      padding: 2em;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 2em;
+      box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    }
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 1.5em;
     }
     .field-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 1em;
+      gap: 1.5em;
     }
     label {
       flex: 1 1 45%;
       display: flex;
       flex-direction: column;
+      font-weight: 500;
     }
     input, select, textarea, button {
-      padding: 0.5em;
-      border-radius: 4px;
+      padding: 0.75em;
+      margin-top: 0.3em;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 1em;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #888;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .crop-container img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 1em;
+    }
+    .button-row {
+      display: flex;
+      gap: 1em;
+      margin-top: 1.5em;
+      justify-content: center;
+    }
+    button {
+      background-color: #3a3a3a;
       border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
-    .crop-container {
-      max-width: 100%;
+    button:hover {
+      background-color: #555;
     }
-    img {
-      max-width: 100%;
+    @media (max-width: 600px) {
+      .field-group label {
+        flex: 1 1 100%;
+      }
     }
   </style>
 </head>
@@ -106,7 +145,10 @@
         <img id="preview" style="display:none" />
       </div>
 
-      <button type="submit">Submit</button>
+      <div class="button-row">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </div>
     </form>
   </div>
 
@@ -133,7 +175,6 @@
       e.preventDefault();
       if (cropper) {
         cropper.getCroppedCanvas().toBlob(blob => {
-          // Send blob and form data to API
           const formData = new FormData(e.target);
           formData.append("croppedImage", blob);
           fetch("/api/submit", { method: "POST", body: formData });
